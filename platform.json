@@ -23,14 +23,14 @@
   "frameworks": {
     "py32f0sdk": {
       "package": "framework-py32f0sdk",
-      "script": "builder/frameworks/sdk.py",
+      "script": "builder/frameworks/sdk.py"
     }
   },
   "packages": {
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
       "owner": "platformio",
-      "version": ">=1.80000.0,<1.120000.0",
+      "version": ">=1.80000.0,<1.120000.0"
     },
     "framework-py32f0sdk": {
       "type": "framework",
