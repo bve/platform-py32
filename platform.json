@@ -4,7 +4,7 @@
   "title": "PY32F0xx",
   "description": "",
   "homepage": "https://www.puyasemi.com/en/py32_series.html",
-  "license": "Apache-2.0",
+  "license": "TBD",
   "keywords": [
     "dev-platform",
     "ARM",
@@ -23,7 +23,7 @@
   "frameworks": {
     "py32f0sdk": {
       "package": "framework-py32f0sdk",
-      "script": "builder/frameworks/sdk.py"
+      "script": "builder/frameworks/py32f0sdk.py"
     }
   },
   "packages": {
@@ -36,13 +36,13 @@
       "type": "framework",
       "optional": true,
       "version": "https://github.com/positron96/framework-py32f0sdk"
-    },    
+    },
     "tool-openocd": {
       "type": "uploader",
       "optional": true,
       "owner": "platformio",
       "version": "~3.1200.0"
-    },    
+    },
     "tool-jlink": {
       "type": "uploader",
       "optional": true,

@@ -1,0 +1,28 @@
+{
+    "build": {
+      "core": "py32",
+      "cpu": "cortex-m0plus",
+      "mcu": "py32f003x8",
+      "extra_flags": "-DPY32F003x8",
+      "ldscript": "py32f003x8.ld"
+    },
+    "debug": {
+      "jlink_device": "nRF52810_xxAA",
+      "svd_path": "nrf52810.svd"
+    },
+    "frameworks": [
+      "py32f0sdk"
+    ],
+    "name": "Generic PY32F003x8",
+    "upload": {
+      "maximum_ram_size": 8192,
+      "maximum_size": 65536,
+      "protocol": "jlink",
+      "protocols": [
+        "jlink",
+        "blackmagic"
+      ]
+    },
+    "url": "https://www.puyasemi.com/en/py32_series.html",
+    "vendor": "Generic"
+  }
