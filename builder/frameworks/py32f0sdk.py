@@ -37,7 +37,7 @@ else:
 
 
 env.Append(
-    ASFLAGS=["-x", "assembler-with-cpp"],
+    ASPPFLAGS=["-x", "assembler-with-cpp"],
 
     CFLAGS=["-std=gnu17"],
 
@@ -120,9 +120,9 @@ env.Append(
 #     ]
 # )
 
-env.Append(
-    ASFLAGS=env.get("CCFLAGS", [])[:]
-)
+# env.Append(
+#     ASFLAGS=env.get("CCFLAGS", [])[:]
+# )
 
 def parse_num(v:str):
     if v.endswith('K'):
@@ -196,7 +196,7 @@ libs.append(
         cmsis_src_dir,
         src_filter=[
             '-<*>',
-            '+<gcc/startup_{}.S>'.format(mcu_short.lower()),
+            '+<gcc/startup_{}.s>'.format(mcu_short.lower()),
             '+<{}>'.format(select_best_file(cmsis_src_dir, 'system_{}.c', mcu_short.lower())),
         ],
     )
