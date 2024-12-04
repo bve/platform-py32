@@ -2,21 +2,21 @@
     "build": {
       "core": "py32",
       "cpu": "cortex-m0plus",
-      "mcu": "py32f003x8",
-      "extra_flags": "-DPY32F003x8",
-      "ldscript": "py32f003x8.ld"
+      "mcu": "py32f003x6",
+      "extra_flags": "-DPY32F003x6",
+      "ldscript": "py32f003x6.ld"
     },
     "debug": {
-      "jlink_device": "PY32F003X8",
+      "jlink_device": "PY32F003X6",
       "svd_path": "py32f003xx.svd"
     },
     "frameworks": [
       "py32f0sdk"
     ],
-    "name": "Generic PY32F003x8",
+    "name": "Generic PY32F003x6",
     "upload": {
-      "maximum_ram_size": 8192,
-      "maximum_size": 65536,
+      "maximum_ram_size": 4096,
+      "maximum_size": 32768,
       "protocol": "jlink",
       "protocols": [
         "jlink",

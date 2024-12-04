@@ -7,33 +7,6 @@ from os.path import isdir, join, basename
 from SCons.Script import (ARGUMENTS, COMMAND_LINE_TARGETS, AlwaysBuild,
                           Builder, Default, DefaultEnvironment)
 
-from platformio.public import list_serial_ports
-
-
-def BeforeUpload(target, source, env):  # pylint: disable=W0613,W0621
-    env.AutodetectUploadPort()
-
-    upload_options = {}
-    if "BOARD" in env:
-        upload_options = env.BoardConfig().get("upload", {})
-
-    if not bool(upload_options.get("disable_flushing", False)):
-        env.FlushSerialBuffer("$UPLOAD_PORT")
-
-    before_ports = list_serial_ports()
-
-    if bool(upload_options.get("use_1200bps_touch", False)):
-        env.TouchSerialPort("$UPLOAD_PORT", 1200)
-
-    if bool(upload_options.get("wait_for_upload_port", False)):
-        env.Replace(UPLOAD_PORT=env.WaitForNewSerialPort(before_ports))
-
-    # use only port name for BOSSA
-    if ("/" in env.subst("$UPLOAD_PORT") and
-            env.subst("$UPLOAD_PROTOCOL") == "sam-ba"):
-        env.Replace(UPLOAD_PORT=basename(env.subst("$UPLOAD_PORT")))
-
-
 env = DefaultEnvironment()
 platform = env.PioPlatform()
 board = env.BoardConfig()
@@ -171,17 +144,12 @@ elif upload_protocol.startswith("jlink"):
         if not isdir(build_dir):
             makedirs(build_dir)
         script_path = join(build_dir, "upload.jlink")
-        commands = ["h"]
-        if "DFUBOOTHEX" in env:
-            commands.append("loadbin %s,%s" % (str(source).replace("_signature", ""),
-                env.BoardConfig().get("upload.offset_address", "0x26000")))
-            commands.append("loadbin %s,%s" % (source, env.get("BOOT_SETTING_ADDR")))
-        else:
-            commands.append("loadbin %s,%s" % (source, env.BoardConfig().get(
-                "upload.offset_address", "0x0")))
-
-        commands.append("r")
-        commands.append("q")
+        commands = [
+            "halt",
+            "loadfile %s" % source,
+            "reset",
+            "exit",
+        ]
 
         with open(script_path, "w") as fp:
             fp.write("\n".join(commands))
@@ -202,6 +170,7 @@ elif upload_protocol.startswith("jlink"):
     upload_actions = [env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")]
 
 elif upload_protocol in debug_tools:
+    print('OpenOCD is not (yet) supported!')
     openocd_args = [
         "-d%d" % (2 if int(ARGUMENTS.get("PIOVERBOSE", 0)) else 1)
     ]

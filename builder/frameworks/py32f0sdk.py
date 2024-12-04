@@ -15,7 +15,7 @@ assert isdir(FRAMEWORK_DIR)
 
 lib_dir = join(FRAMEWORK_DIR, 'libraries')
 
-mcu_long = board.get("build.mcu", "").upper()  # e.g. PY32f003X8
+mcu_long = board.get("build.mcu", "").upper()  # e.g. PY32F003X8
 mcu_short = re.findall('PY32F\d\d\d[AB]?', mcu_long)[0]  # PY32F003
 
 if mcu_short == 'PY32F002B':
@@ -25,7 +25,7 @@ elif mcu_short.startswith('PY32F07'):
 else:
     dir_prefix = 'PY32F0xx'
 
-dir_cmsis = join(FRAMEWORK_DIR, 'CMSIS')
+cmsis_dir = join(FRAMEWORK_DIR, 'CMSIS')
 
 need_hal = '-DUSE_HAL_DRIVER' in env['BUILD_FLAGS']
 if need_hal:
@@ -35,18 +35,23 @@ else:
     driver_dir = join(FRAMEWORK_DIR, dir_prefix+'_LL_Driver')
     bsp_dir = join(FRAMEWORK_DIR, dir_prefix+'_LL_BSP')
 
+machine_flags = [
+    '-mthumb',
+    '-mcpu={}'.format(board.get('build.cpu')),
+]
+
 
 env.Append(
-    ASPPFLAGS=["-x", "assembler-with-cpp"],
+    ASFLAGS=machine_flags,
+    ASPPFLAGS = ['-x', 'assembler-with-cpp'],
 
-    CFLAGS=["-std=gnu17"],
+    CFLAGS=['-std=gnu17'],
 
-    CCFLAGS=[
+    CCFLAGS=machine_flags + [
         "-Os",  # optimize for size
         "-ffunction-sections",  # place each function in its own section
         "-fdata-sections",
         "-Wall",
-        "-mthumb",
         "-nostdlib",
     ],
 
@@ -65,22 +70,15 @@ env.Append(
 
     # includes
     CPPPATH=[
-        join(dir_cmsis, 'Core', 'Include'),
-        join(dir_cmsis, 'Device', 'PY32F0xx', 'Include'),
+        join(cmsis_dir, 'Core', 'Include'),
+        join(cmsis_dir, 'Device', 'PY32F0xx', 'Include'),
         join(driver_dir, 'Inc'),
         join(bsp_dir, 'Inc'),
         env.subst("${PROJECT_INCLUDE_DIR}"),  # place for py32f0xx_hal_conf.h
     ],
-
-#"-Wl,-Map=${CMAKE_PROJECT_NAME}.map
-# -Wl,--gc-sections
-# -Wl,--print-memory-usage
-# -Wl,--no-warn-rwx-segments
-# -T ${CMAKE_SOURCE_DIR}/puya_libs/LDScripts/${PUYA_CHIP}.ld" )
-    LINKFLAGS=[
+    LINKFLAGS = machine_flags + [
         "-Os",
         "-Wl,--gc-sections",
-        "-mthumb",
         "--specs=nano.specs",
         "--specs=nosys.specs",
         "-static",
@@ -88,43 +86,18 @@ env.Append(
         "-Wl,--unresolved-symbols=report-all",
         "-Wl,--warn-common",
         "-Wl,--warn-section-align",
-        "-Wl,--print-memory-usage",
     ],
 
-    LIBSOURCE_DIRS=[join(FRAMEWORK_DIR, 'libraries')],
+    # LIBSOURCE_DIRS=[join(FRAMEWORK_DIR, 'libraries')],
 
     LIBS=["c", "m"]
 )
-
-env.Append(
-    CCFLAGS=[
-        "-mcpu=%s" % board.get("build.cpu")
-    ],
-    LINKFLAGS=[
-        "-mcpu=%s" % board.get("build.cpu")
-    ]
-)
-
-# env.Append(
-#     ASFLAGS=[
-#         "-mfloat-abi=hard",
-#         "-mfpu=fpv4-sp-d16",
-#     ],
-#     CCFLAGS=[
-#         "-mfloat-abi=hard",
-#         "-mfpu=fpv4-sp-d16"
-#     ],
-#     LINKFLAGS=[
-#         "-mfloat-abi=hard",
-#         "-mfpu=fpv4-sp-d16",
-#     ]
-# )
 
 # env.Append(
 #     ASFLAGS=env.get("CCFLAGS", [])[:]
 # )
 
-def parse_num(v:str):
+def parse_ld_num(v:str):
     if v.endswith('K'):
         return int(v[:-1]) * 1024
     elif v.endswith('M'):
@@ -135,12 +108,11 @@ def parse_num(v:str):
 def get_linker_sizes(ld_file: str):
     """Very hacky way to read flash/ram size from ld file. """
     try:
-        print(ld_file)
         with open(ld_file, 'r', encoding='utf-8') as f:
             all = f.read()
             flash = re.findall('FLASH.*ORIGIN\s*=\s*(\w*),\s*LENGTH\s*=\s*(\w*)', all)[0]
             ram = re.findall('RAM.*ORIGIN\s*=\s*(\w*),\s*LENGTH\s*=\s*(\w*)', all)[0]
-            return parse_num(flash[1]), parse_num(ram[1])
+            return parse_ld_num(flash[1]), parse_ld_num(ram[1])
     except IndexError:
         return None
     return None
@@ -189,7 +161,7 @@ def select_best_file(path, filemask, mcu):
     return None
 
 
-cmsis_src_dir = join(dir_cmsis, 'Device', 'PY32F0xx', 'Source')
+cmsis_src_dir = join(cmsis_dir, 'Device', 'PY32F0xx', 'Source')
 libs.append(
     env.BuildLibrary(
         join("$BUILD_DIR", "FrameworkCMSISDevice"),
