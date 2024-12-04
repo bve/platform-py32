@@ -73,7 +73,6 @@ env.Append(
         join(cmsis_dir, 'Core', 'Include'),
         join(cmsis_dir, 'Device', 'PY32F0xx', 'Include'),
         join(driver_dir, 'Inc'),
-        join(bsp_dir, 'Inc'),
         env.subst("${PROJECT_INCLUDE_DIR}"),  # place for py32f0xx_hal_conf.h
     ],
     LINKFLAGS = machine_flags + [
@@ -92,6 +91,14 @@ env.Append(
 
     LIBS=["c", "m"]
 )
+
+need_bsp = '-DUSE_BSP' in env['BUILD_FLAGS']
+
+if need_bsp:
+    env.Append(
+        CPPPATH=[join(bsp_dir, 'Inc')],
+    )
+
 
 # env.Append(
 #     ASFLAGS=env.get("CCFLAGS", [])[:]
@@ -156,7 +163,6 @@ def select_best_file(path, filemask, mcu):
 
     for f in files:
         if re.match(f.replace('x', '.'), presize_file):
-            print(f)
             return f
     return None
 

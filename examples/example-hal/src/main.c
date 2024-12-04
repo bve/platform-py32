@@ -1,7 +1,7 @@
 /***
  * Demo: LED Toggle
  *
- * PB5   ------> LED+
+ * PB6   ------> LED+
  * GND   ------> LED-
  */
 #include "py32f0xx_bsp_printf.h"
