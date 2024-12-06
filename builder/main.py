@@ -76,8 +76,6 @@ env.Append(
         ),
 ))
 
-upload_protocol = env.subst("$UPLOAD_PROTOCOL")
-
 
 if not env.get("PIOFRAMEWORK"):
     env.SConscript("frameworks/_bare.py")
@@ -113,7 +111,9 @@ target_size = env.AddPlatformTarget(
 # Target: Upload file
 #
 
+upload_protocol = env.subst("$UPLOAD_PROTOCOL")
 debug_tools = env.BoardConfig().get("debug.tools", {})
+debug_server = debug_tools.get(upload_protocol, {}).get("server")
 upload_actions = []
 
 if upload_protocol.startswith("blackmagic"):
@@ -168,6 +168,17 @@ elif upload_protocol.startswith("jlink"):
         UPLOADCMD='$UPLOADER $UPLOADERFLAGS -CommanderScript "${__jlink_cmd_script(__env__, SOURCE)}"'
     )
     upload_actions = [env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")]
+
+elif debug_server and debug_server.get("package") == "tool-pyocd":
+    env.Replace(
+        UPLOADER=join(platform.get_package_dir("tool-pyocd") or "",
+                      "pyocd.py"),
+        UPLOADERFLAGS=['load'] + debug_server.get("arguments", [])[1:],
+        UPLOADCMD='"$PYTHONEXE" "$UPLOADER" $UPLOADERFLAGS $SOURCE'
+    )
+    upload_actions = [
+        env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")
+    ]
 
 elif upload_protocol in debug_tools:
     print('OpenOCD is not (yet) supported!')

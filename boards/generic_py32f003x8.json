@@ -8,7 +8,8 @@
     },
     "debug": {
       "jlink_device": "PY32F003X8",
-      "svd_path": "py32f003xx.svd"
+      "svd_path": "py32f003xx.svd",
+      "pyocd_target": "PY32F003x8"
     },
     "frameworks": [
       "py32f0sdk"
@@ -20,7 +21,8 @@
       "protocol": "jlink",
       "protocols": [
         "jlink",
-        "blackmagic"
+        "blackmagic",
+        "stlink"
       ]
     },
     "url": "https://www.puyasemi.com/en/py32_series.html",

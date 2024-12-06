@@ -43,15 +43,17 @@
       "owner": "platformio",
       "version": "~3.1200.0"
     },
+    "tool-pyocd": {
+      "type": "uploader",
+      "optional": true,
+      "owner": "platformio",
+      "version": "~2.3600.0"
+    },
     "tool-jlink": {
       "type": "uploader",
       "optional": true,
       "owner": "platformio",
       "version": "^1.63208.0"
-    },
-    "tool-sreccat": {
-      "owner": "platformio",
-      "version": "~1.164.0"
     }
   }
 }
