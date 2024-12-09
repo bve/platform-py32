@@ -139,6 +139,8 @@ if upload_protocol.startswith("blackmagic"):
 
 elif upload_protocol.startswith("jlink"):
 
+    sys.stderr.write('jlink not supported now')
+
     def _jlink_cmd_script(env, source):
         build_dir = env.subst("$BUILD_DIR")
         if not isdir(build_dir):
@@ -181,7 +183,7 @@ elif debug_server and debug_server.get("package") == "tool-pyocd":
     ]
 
 elif upload_protocol in debug_tools:
-    print('OpenOCD is not (yet) supported!')
+    sys.stderr.write('OpenOCD is not (yet) supported!')
     openocd_args = [
         "-d%d" % (2 if int(ARGUMENTS.get("PIOVERBOSE", 0)) else 1)
     ]
