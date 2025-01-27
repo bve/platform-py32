@@ -52,7 +52,12 @@ class Py32f0Platform(PlatformBase):
             if link not in upload_protocols or link in debug["tools"]:
                 continue
 
-            if link == "stlink":
+            if link == "blackmagic":
+                debug["tools"]["blackmagic"] = {
+                    "hwids": [["0x1d50", "0x6018"]],
+                    "require_debug_port": True
+                }
+            elif link == "stlink":
                 pyocd_target = debug.get("pyocd_target")
                 assert pyocd_target
 
