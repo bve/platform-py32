@@ -50,6 +50,7 @@ env.Append(
         "-Os",
         "-Wl,--gc-sections,--relax",
         "-mthumb",
+        "-static",
         "--specs=nano.specs",
         "--specs=nosys.specs"
     ],

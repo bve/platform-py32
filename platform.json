@@ -1,6 +1,6 @@
 
 {
-  "name": "py32f0",
+  "name": "platform-py32f0xx",
   "title": "PY32F0xx",
   "description": "",
   "homepage": "https://www.puyasemi.com/en/py32_series.html",
@@ -24,13 +24,22 @@
     "py32f0sdk": {
       "package": "framework-py32f0sdk",
       "script": "builder/frameworks/py32f0sdk.py"
-    }
+    },
+    "arduino": {
+      "package": "Arduino-PY32",
+      "script": "builder/frameworks/arduino.py",
+      "title": "PY32Duino framework"
+  }
   },
   "packages": {
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
       "owner": "platformio",
-      "version": ">=1.80000.0,<1.120000.0"
+      "version": ">=1.120301.0"
+    },
+    "Arduino-PY32": {
+      "type": "framework",
+      "version": "https://github.com/microcai/Arduino-PY32.git"
     },
     "framework-py32f0sdk": {
       "type": "framework",

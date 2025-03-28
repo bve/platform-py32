@@ -11,7 +11,7 @@
       "svd_path": "py32f003xx.svd"
     },
     "frameworks": [
-      "py32f0sdk"
+      "py32f0sdk","arduino"
     ],
     "name": "Generic PY32F003x6",
     "upload": {

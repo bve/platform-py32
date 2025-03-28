@@ -2,20 +2,20 @@
     "build": {
       "core": "py32",
       "cpu": "cortex-m0plus",
-      "mcu": "py32f003x8",
-      "extra_flags": "-DPY32F003x8",
-      "ldscript": "py32f003x8.ld",
-      "bsp": "PY32F003xx"
+      "mcu": "py32f030x8",
+      "extra_flags": "-DPY32F030x8",
+      "ldscript": "py32f030.ld",
+      "bsp": "PY32F030"
     },
     "debug": {
-      "jlink_device": "PY32F003X8",
-      "svd_path": "py32f003xx.svd",
-      "pyocd_target": "PY32F003x8"
+      "jlink_device": "PY32F030X8",
+      "svd_path": "py32f030xx.svd",
+      "pyocd_target": "PY32F030x8"
     },
     "frameworks": [
       "py32f0sdk","arduino"
     ],
-    "name": "Generic PY32F003x8",
+    "name": "Generic PY32F030x8",
     "upload": {
       "maximum_ram_size": 8192,
       "maximum_size": 65536,
