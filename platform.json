@@ -35,7 +35,7 @@
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
       "owner": "platformio",
-      "version": ">=1.120301.0"
+      "version": "=1.120301.0"
     },
     "Arduino-PY32": {
       "type": "framework",
