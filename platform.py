@@ -10,7 +10,7 @@ IS_WINDOWS = sys.platform.startswith("win")
 PLATFORM_DIR = os.path.dirname(__file__)
 
 
-class Py32f0Platform(PlatformBase):
+class Platformpy32f0xxPlatform(PlatformBase):
 
     def is_embedded(self):
         return True
