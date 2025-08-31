@@ -47,6 +47,7 @@ env.Append(
         join(FRAMEWORK_DIR, "system", "PY32F0xx"),
         join(FRAMEWORK_LIB_DIR, "Arduino", "inc"),
         join(FRAMEWORK_LIB_DIR, "Wire", "src"),
+        join(FRAMEWORK_LIB_DIR, "SPI", "src"),
         join(FRAMEWORK_DIR, "system", "Arduino-PY32F0xx-Drivers", "CMSIS", "Device", "PY32F0xx", "Source", "gcc"),
     ]
 )
@@ -112,6 +113,16 @@ libs.append(env.BuildLibrary(
 libs.append(env.BuildLibrary(
     join("$BUILD_DIR", "arduino", 'Wire'),
     join(FRAMEWORK_DIR, "libraries", "Wire", "src"),
+    src_filter=[
+        "+<*.c>",
+        "+<*.cpp>",
+        "+<utility/*.c>",
+    ]
+))
+
+libs.append(env.BuildLibrary(
+    join("$BUILD_DIR", "arduino", 'SPI'),
+    join(FRAMEWORK_DIR, "libraries", "SPI", "src"),
     src_filter=[
         "+<*.c>",
         "+<*.cpp>",
